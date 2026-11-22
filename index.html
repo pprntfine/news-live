@@ -1,0 +1,91 @@
+<title>ニュースライブ一覧</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* Layout: 見出し帯 + 絞り込みタブ + 放送局ごとの行リスト（地域別セクション） */
+:root{
+  --bg:#f3f5f7; --surface:#ffffff; --fg:#14202b; --muted:#5a6b7a; --line:#d9e0e6;
+  --live:#d6293e; --accent:#0b5cad; --accent-fg:#ffffff; --chip:#e8eef4;
+  --font-body:"Noto Sans JP",system-ui,sans-serif; --font-head:"Space Grotesk","Noto Sans JP",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f161d; --surface:#17212b; --fg:#e6edf3; --muted:#9aabba; --line:#27343f;
+  --live:#ff5a6e; --accent:#5aa9f0; --accent-fg:#0f161d; --chip:#223140; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f161d; --surface:#17212b; --fg:#e6edf3; --muted:#9aabba; --line:#27343f;
+  --live:#ff5a6e; --accent:#5aa9f0; --accent-fg:#0f161d; --chip:#223140; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);line-height:1.6}
+.wrap{max-width:860px;margin:0 auto;padding-block:32px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font-family:var(--font-head);font-size:clamp(1.6rem,5vw,2.2rem);margin:0 0 4px;text-wrap:balance;letter-spacing:.01em}
+.lead{color:var(--muted);margin:0 0 20px;font-size:.95rem}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.tabs button{font:inherit;font-size:.9rem;padding:6px 16px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+section{margin-bottom:28px}
+h2{font-family:var(--font-head);font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:0 0 8px;font-weight:700}
+ul{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--surface);overflow:hidden}
+li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;align-items:center;padding:14px 16px;border-top:1px solid var(--line)}
+li:first-child{border-top:0}
+.name{font-weight:700;font-size:1.02rem;min-width:0}
+.name small{display:block;font-weight:400;color:var(--muted);font-size:.85rem}
+.tag{display:inline-block;font-size:.72rem;padding:1px 8px;border-radius:4px;background:var(--chip);color:var(--muted);margin-right:6px;font-weight:500}
+.tag.live{background:transparent;color:var(--live);border:1px solid var(--live)}
+.go{font-size:.9rem;font-weight:500;color:var(--accent);text-decoration:none;white-space:nowrap;padding:6px 0}
+.go:hover{text-decoration:underline}
+@media(max-width:480px){li{grid-template-columns:1fr}}
+.note{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padding-top:16px;margin-top:8px}
+.note a{color:var(--accent)}
+[hidden]{display:none!important}
+</style>
+
+<main class="wrap">
+  <h1>ニュースライブ一覧</h1>
+  <p class="lead">24時間配信とされているニュースライブ。2026年11月22日時点の調査で、各リンク先の「LIVE」表示は未確認です。</p>
+
+  <div class="tabs" role="group" aria-label="地域で絞り込み">
+    <button type="button" data-f="all" aria-pressed="true">すべて</button>
+    <button type="button" data-f="jp" aria-pressed="false">日本</button>
+    <button type="button" data-f="world" aria-pressed="false">海外</button>
+  </div>
+
+  <section data-g="jp">
+    <h2>日本</h2>
+    <ul>
+      <li><div class="name">日テレNEWS24<small>日本テレビ系 / TVer「24時間ニュースライブ」</small></div><a class="go" href="https://tver.jp/" target="_blank" rel="noopener">TVerで見る →</a></li>
+      <li><div class="name">TBS NEWS DIG Powered by JNN<small>TBS系 / TVer「24時間ニュースライブ」</small></div><a class="go" href="https://tver.jp/" target="_blank" rel="noopener">TVerで見る →</a></li>
+      <li><div class="name">FNNフジテレビNEWS24!<small>フジテレビ系 / TVer「24時間ニュースライブ」</small></div><a class="go" href="https://tver.jp/" target="_blank" rel="noopener">TVerで見る →</a></li>
+      <li><div class="name">特務機関NERV防災ライブ<small><span class="tag">防災・気象</span>2026年11月2日に配信開始、24時間365日（報道局の番組ではありません）</small></div><a class="go" href="https://www.youtube.com/results?search_query=%E7%89%B9%E5%8B%99%E6%A9%9F%E9%96%A2NERV%E9%98%B2%E7%81%BD%E3%83%A9%E3%82%A4%E3%83%96" target="_blank" rel="noopener">YouTubeで探す →</a></li>
+      <li><div class="name">NHK<small><span class="tag">未確認</span>検索では配信情報が得られませんでした</small></div><a class="go" href="https://www.nhk.or.jp/news/" target="_blank" rel="noopener">NHKニュース →</a></li>
+    </ul>
+  </section>
+
+  <section data-g="world">
+    <h2>海外（YouTube）</h2>
+    <ul>
+      <li><div class="name">BBC News<small>米国・英国向けに24時間配信を開始と報道</small></div><a class="go" href="https://www.youtube.com/@BBCNews" target="_blank" rel="noopener">YouTubeで見る →</a></li>
+      <li><div class="name">LiveNOW from FOX<small>米国</small></div><a class="go" href="https://www.youtube.com/@LiveNOWFOX" target="_blank" rel="noopener">YouTubeで見る →</a></li>
+      <li><div class="name">Al Jazeera English<small>カタール</small></div><a class="go" href="https://www.youtube.com/@aljazeeraenglish" target="_blank" rel="noopener">YouTubeで見る →</a></li>
+      <li><div class="name">Euronews<small>欧州 / 複数言語のチャンネル</small></div><a class="go" href="https://www.youtube.com/@euronews" target="_blank" rel="noopener">YouTubeで見る →</a></li>
+      <li><div class="name">CBC News<small>カナダ</small></div><a class="go" href="https://www.youtube.com/@CBCNews" target="_blank" rel="noopener">YouTubeで見る →</a></li>
+      <li><div class="name">GB News<small>英国</small></div><a class="go" href="https://www.youtube.com/@GBNewsOnline" target="_blank" rel="noopener">YouTubeで見る →</a></li>
+      <li><div class="name">WION<small>インド</small></div><a class="go" href="https://www.youtube.com/@WION" target="_blank" rel="noopener">YouTubeで見る →</a></li>
+      <li><div class="name">Yahoo Finance<small>米国 / 経済</small></div><a class="go" href="https://www.youtube.com/@YahooFinance" target="_blank" rel="noopener">YouTubeで見る →</a></li>
+    </ul>
+  </section>
+
+  <p class="note">YouTubeチャンネルのリンクは公式のチャンネル名から作成しており、移転や名称変更で開けない場合があります。TVerの枠は2024年10月開始の報道に基づきます。出典:
+    <a href="https://www.phileweb.com/sp/news/d-av/202410/01/61219.html" target="_blank" rel="noopener">PHILE WEB</a>、
+    <a href="https://blog.youtube/news-and-events/bbc-news-live-youtube-launch/" target="_blank" rel="noopener">YouTube Blog</a>、
+    <a href="https://support.google.com/youtube/answer/9057101?hl=en" target="_blank" rel="noopener">YouTubeヘルプ</a></p>
+</main>
+
+<script>
+(function(){
+  var btns=document.querySelectorAll('.tabs button'),secs=document.querySelectorAll('section[data-g]');
+  btns.forEach(function(b){b.addEventListener('click',function(){
+    btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});
+    secs.forEach(function(s){s.hidden=b.dataset.f!=='all'&&s.dataset.g!==b.dataset.f});
+  })});
+})();
+</script>
