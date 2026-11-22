@@ -35,6 +35,7 @@ h1{font-family:var(--font-head);font-size:clamp(1.6rem,5vw,2.2rem);margin:0 0 4p
 .screen{position:relative;aspect-ratio:16/9;width:min(100%,calc(45vh*16/9));margin-inline:auto;background:var(--screen);border-radius:8px;overflow:hidden;display:grid;place-items:center}
 .screen iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .tag.live{background:transparent;color:var(--live);border:1px solid var(--live)}
+.resume{margin-top:10px;font:inherit;font-weight:700;padding:8px 18px;border:0;border-radius:6px;background:var(--live);color:#fff;cursor:pointer}
 .fallback{color:#8cc4ff;font-weight:700}
 .idle{color:#9aabba;text-align:center;padding:16px;font-size:.95rem}
 .now{display:flex;align-items:center;gap:10px;margin-top:10px;min-height:1.6em;font-weight:700}
@@ -208,6 +209,7 @@ li.active .play{background:var(--chip);color:var(--fg)}
   }
   function play(li){
     items.forEach(function(x){x.classList.toggle('active',x===li)});
+    playing=null;
     nowName.textContent=li.dataset.name;now.hidden=false;
     if(!li.dataset.vid){message(li,li.dataset.state==='loading'?'配信状況を確認中です。少し待ってからもう一度押してください。':'現在ライブ配信が見つかりません。');return}
     if(li.dataset.embed==='0'){message(li,'この配信は埋め込み再生が許可されていません。');return}
@@ -215,7 +217,22 @@ li.active .play{background:var(--chip);color:var(--fg)}
     f.src='https://www.youtube.com/embed/'+li.dataset.vid+'?autoplay=1&playsinline=1';
     f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.title=li.dataset.name+' ライブ';
     screen.replaceChildren(f);
+    playing=li;
   }
+  // Stop playback while the page is in the background (home screen, other tab) and offer to resume.
+  var playing=null;
+  function stopForBackground(){
+    if(!playing||!screen.querySelector('iframe'))return;
+    var li=playing;
+    var box=document.createElement('div');box.className='idle';
+    box.appendChild(document.createTextNode('バックグラウンドのため再生を止めました。'));
+    var b=document.createElement('button');b.type='button';b.className='resume';b.textContent='▶ '+li.dataset.name+' の再生を再開';
+    b.addEventListener('click',function(){play(li)});
+    box.appendChild(document.createElement('br'));box.appendChild(b);
+    screen.replaceChildren(box);
+  }
+  document.addEventListener('visibilitychange',function(){if(document.hidden)stopForBackground()});
+  window.addEventListener('pagehide',stopForBackground);
   function badge(li,text,cls){
     var t=li.querySelector('.status');
     if(!t){t=document.createElement('span');t.className='tag status';li.querySelector('.name').insertBefore(t,li.querySelector('.name').firstChild)}
