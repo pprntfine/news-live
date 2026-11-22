@@ -35,6 +35,7 @@ h1{font-family:var(--font-head);font-size:clamp(1.6rem,5vw,2.2rem);margin:0 0 4p
 .now[hidden]{display:none}
 .hint{color:var(--muted);font-size:.82rem;margin:4px 0 0}
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.only{margin-left:auto;font-size:.9rem;display:flex;align-items:center;gap:6px;cursor:pointer}
 .tabs button{font:inherit;font-size:.9rem;padding:6px 16px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;cursor:pointer}
 .tabs button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
 button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -70,6 +71,7 @@ li.active .play{background:var(--chip);color:var(--fg)}
   </div>
 
   <div class="tabs" role="group" aria-label="地域で絞り込み">
+    <label class="only"><input type="checkbox" id="liveOnly"> ライブ中のみ</label>
     <button type="button" data-f="all" aria-pressed="true">すべて</button>
     <button type="button" data-f="jp" aria-pressed="false">日本</button>
     <button type="button" data-f="world" aria-pressed="false">海外</button>
@@ -78,24 +80,56 @@ li.active .play{background:var(--chip);color:var(--fg)}
   <section data-g="jp">
     <h2>日本</h2>
     <ul>
-      <li data-ch="UCeCmAYh1ylwIsgGrmqaklzg" data-name="TBS NEWS DIG"><div class="name">TBS NEWS DIG<small>TBS系 / YouTubeチャンネル</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCeCmAYh1ylwIsgGrmqaklzg" target="_blank" rel="noopener">YouTube</a></div></li>
-      <li data-ch="UC1ipzc08F-FjrZ5jIaZVPIw" data-name="FNNプライムオンライン"><div class="name">FNNプライムオンライン<small>フジテレビ系 / YouTubeチャンネル</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UC1ipzc08F-FjrZ5jIaZVPIw" target="_blank" rel="noopener">YouTube</a></div></li>
-      <li data-ch="UCip8ve30-AoX2y2OtAAmqFA" data-name="NHK"><div class="name">NHK<small><span class="tag">未確認</span>ライブ配信中かは再生して確認してください</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCip8ve30-AoX2y2OtAAmqFA" target="_blank" rel="noopener">YouTube</a></div></li>
-      <li><div class="name">日テレNEWS24<small>TVerのみ（このページでは再生できません）</small></div><div class="act"><a class="go" href="https://tver.jp/" target="_blank" rel="noopener">TVerで見る →</a></div></li>
+      <li data-ch="UCuTAXTexrhetbOe3zgskJBQ" data-name="日テレNEWS"><div class="name">日テレNEWS<small>日本テレビ系</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCuTAXTexrhetbOe3zgskJBQ/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UC6AG81pAkf6Lbi_1VC5NmPA" data-name="TBS NEWS DIG Powered by JNN"><div class="name">TBS NEWS DIG Powered by JNN<small>TBS系</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UC6AG81pAkf6Lbi_1VC5NmPA/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCoQBJMzcwmXrRSHBFAlTsIw" data-name="FNNプライムオンライン"><div class="name">FNNプライムオンライン<small>フジテレビ系</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCoQBJMzcwmXrRSHBFAlTsIw/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCGCZAYq5Xxojl_tSXcVJhiQ" data-name="ANNnewsCH"><div class="name">ANNnewsCH<small>テレビ朝日系</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCGCZAYq5Xxojl_tSXcVJhiQ/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCghgvap_zF8JeHqXsiKAPDA" data-name="ABEMA NEWS"><div class="name">ABEMA NEWS<small>YouTube版チャンネル</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCghgvap_zF8JeHqXsiKAPDA/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCkKVQ_GNjd8FbAuT6xDcWgg" data-name="テレ東BIZ"><div class="name">テレ東BIZ<small>テレビ東京 / 経済</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCkKVQ_GNjd8FbAuT6xDcWgg/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UClVsQnfs-jKkjKmUKUHnT2g" data-name="日経CNBC"><div class="name">日経CNBC<small>経済</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UClVsQnfs-jKkjKmUKUHnT2g/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UC4dQUfQeA-Jy2T_C-Jdf5rw" data-name="TOKYO MX"><div class="name">TOKYO MX<small>東京</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UC4dQUfQeA-Jy2T_C-Jdf5rw/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCNsidkYpIAQ4QaufptQBPHQ" data-name="ウェザーニュース"><div class="name">ウェザーニュース<small>天気・防災</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCNsidkYpIAQ4QaufptQBPHQ/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCSPEjw8F2nQDtmUKPFNF7_A" data-name="NHK WORLD-JAPAN"><div class="name">NHK WORLD-JAPAN<small>NHKの国際放送（英語）</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCSPEjw8F2nQDtmUKPFNF7_A/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-link="1"><div class="name">ABEMAニュース（24時間）<small>ABEMA / このページでは再生できません</small></div><div class="act"><a class="go" href="https://abema.tv/now-on-air/abema-news" target="_blank" rel="noopener">ABEMAで見る →</a></div></li>
+      <li data-link="1"><div class="name">TVer 24時間ニュースライブ<small>日テレ・TBS・フジ / TVer</small></div><div class="act"><a class="go" href="https://tver.jp/" target="_blank" rel="noopener">TVerで見る →</a></div></li>
+      <li data-link="1"><div class="name">NHKニュース<small>NHK / ニュースサイト</small></div><div class="act"><a class="go" href="https://www.nhk.or.jp/news/" target="_blank" rel="noopener">NHKで見る →</a></div></li>
     </ul>
   </section>
 
   <section data-g="world">
     <h2>海外</h2>
     <ul>
-      <li data-ch="UC16niRr50-MSBwiO3YDb3RA" data-name="BBC News"><div class="name">BBC News<small>英国</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/@BBCNews" target="_blank" rel="noopener">YouTube</a></div></li>
-      <li data-ch="UCDiPds0v60wueil5B8w3fPQ" data-name="LiveNOW from FOX"><div class="name">LiveNOW from FOX<small>米国</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/@LiveNOWFOX" target="_blank" rel="noopener">YouTube</a></div></li>
-      <li data-ch="UCfiwzLy-8yKzIbsmZTzxDgw" data-name="Al Jazeera English"><div class="name">Al Jazeera English<small>カタール</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/@aljazeeraenglish" target="_blank" rel="noopener">YouTube</a></div></li>
-      <li data-ch="UCSrZ3UV4jOidv8ppoVuvW9Q" data-name="Euronews"><div class="name">Euronews<small>欧州（英語）</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/@euronews" target="_blank" rel="noopener">YouTube</a></div></li>
-      <li data-ch="UCuFFtHWoLl5fauMMD5Ww2jA" data-name="CBC News"><div class="name">CBC News<small>カナダ</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/@CBCNews" target="_blank" rel="noopener">YouTube</a></div></li>
-      <li data-ch="UC0vn8ISa4LKMunLbzaXLnOQ" data-name="GB News"><div class="name">GB News<small>英国</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/@GBNewsOnline" target="_blank" rel="noopener">YouTube</a></div></li>
-      <li data-ch="UC_gUM8rL-Lrg6O3adPW9K1g" data-name="WION"><div class="name">WION<small>インド</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/@WION" target="_blank" rel="noopener">YouTube</a></div></li>
-      <li data-ch="UCEAZeUIeJs0IjQiqTCdVSIg" data-name="Yahoo Finance"><div class="name">Yahoo Finance<small>米国 / 経済</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/@YahooFinance" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UC16niRr50-MSBwiO3YDb3RA" data-name="BBC News"><div class="name">BBC News<small>英国</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UC16niRr50-MSBwiO3YDb3RA/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCoMdktPbSTixAyNGwb-UYkQ" data-name="Sky News"><div class="name">Sky News<small>英国</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCoMdktPbSTixAyNGwb-UYkQ/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UC0vn8ISa4LKMunLbzaXLnOQ" data-name="GB News"><div class="name">GB News<small>英国</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UC0vn8ISa4LKMunLbzaXLnOQ/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCknLrEdhRCp1aegoMqRaCZg" data-name="DW News"><div class="name">DW News<small>ドイツ（英語）</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCknLrEdhRCp1aegoMqRaCZg/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCZMsvbAhhRblVGXmEXW8TSA" data-name="WELT"><div class="name">WELT<small>ドイツ（ドイツ語）</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCZMsvbAhhRblVGXmEXW8TSA/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UC5NOEUbkLheQcaaRldYW5GA" data-name="tagesschau"><div class="name">tagesschau<small>ドイツ（ドイツ語）</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UC5NOEUbkLheQcaaRldYW5GA/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCCCPCZNChQdGa9EkATeye4g" data-name="FRANCE 24"><div class="name">FRANCE 24<small>フランス</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCCCPCZNChQdGa9EkATeye4g/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCSrZ3UV4jOidv8ppoVuvW9Q" data-name="Euronews"><div class="name">Euronews<small>欧州（英語）</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCSrZ3UV4jOidv8ppoVuvW9Q/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCNye-wNBqNL5ZzHSJj3l8Bg" data-name="Al Jazeera English"><div class="name">Al Jazeera English<small>カタール</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCNye-wNBqNL5ZzHSJj3l8Bg/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCahpxixMCwoANAftn6IxkTg" data-name="Al Arabiya"><div class="name">Al Arabiya<small>サウジアラビア（アラビア語）</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCahpxixMCwoANAftn6IxkTg/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UC7fWeaHhqgM4Ry-RMpM2YYw" data-name="TRT World"><div class="name">TRT World<small>トルコ</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UC7fWeaHhqgM4Ry-RMpM2YYw/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCvHDpsWKADrDia0c99X37vg" data-name="i24NEWS English"><div class="name">i24NEWS English<small>イスラエル</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCvHDpsWKADrDia0c99X37vg/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UC83jt4dlz1Gjl58fzQrrKZg" data-name="CNA"><div class="name">CNA<small>シンガポール</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UC83jt4dlz1Gjl58fzQrrKZg/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UC_gUM8rL-Lrg6O3adPW9K1g" data-name="WION"><div class="name">WION<small>インド</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UC_gUM8rL-Lrg6O3adPW9K1g/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCZFMm1mMw0F81Z37aaEzTUA" data-name="NDTV"><div class="name">NDTV<small>インド</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCZFMm1mMw0F81Z37aaEzTUA/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCYPvAwZP8pZhSMW8qs7cVCw" data-name="India Today"><div class="name">India Today<small>インド</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCYPvAwZP8pZhSMW8qs7cVCw/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UC6RJ7-PaXg6TIH2BzZfTV7w" data-name="Times Now"><div class="name">Times Now<small>インド</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UC6RJ7-PaXg6TIH2BzZfTV7w/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCef1-8eOpJgud7szVPlZQAQ" data-name="CNN-News18"><div class="name">CNN-News18<small>インド</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCef1-8eOpJgud7szVPlZQAQ/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCVgO39Bk5sMo66-6o6Spn6Q" data-name="ABC News (Australia)"><div class="name">ABC News (Australia)<small>オーストラリア</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCVgO39Bk5sMo66-6o6Spn6Q/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCuFFtHWoLl5fauMMD5Ww2jA" data-name="CBC News"><div class="name">CBC News<small>カナダ</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCuFFtHWoLl5fauMMD5Ww2jA/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UChLtXXpo4Ge1ReTEboVvTDg" data-name="Global News"><div class="name">Global News<small>カナダ</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UChLtXXpo4Ge1ReTEboVvTDg/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCupvZG-5ko_eiXAupbDfxWw" data-name="CNN"><div class="name">CNN<small>米国</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCupvZG-5ko_eiXAupbDfxWw/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCBi2mrWuNuyYy4gbM6fU18Q" data-name="ABC News"><div class="name">ABC News<small>米国</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCBi2mrWuNuyYy4gbM6fU18Q/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCeY0bbntWzzVIaj2z3QigXg" data-name="NBC News"><div class="name">NBC News<small>米国</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCeY0bbntWzzVIaj2z3QigXg/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UC8p1vwvWtl6T73JiExfWs1g" data-name="CBS News"><div class="name">CBS News<small>米国</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UC8p1vwvWtl6T73JiExfWs1g/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCJg9wBPyKMNA5sRDnvzmkdg" data-name="LiveNOW from FOX"><div class="name">LiveNOW from FOX<small>米国</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCJg9wBPyKMNA5sRDnvzmkdg/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCXIJgqnII2ZOINSWNOGFThA" data-name="Fox News"><div class="name">Fox News<small>米国</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCXIJgqnII2ZOINSWNOGFThA/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCx6h-dWzJ5NpAlja1YsApdg" data-name="Newsmax"><div class="name">Newsmax<small>米国</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCx6h-dWzJ5NpAlja1YsApdg/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UChqUTb7kYRX8-EiaN3XFrSQ" data-name="Reuters"><div class="name">Reuters<small>通信社</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UChqUTb7kYRX8-EiaN3XFrSQ/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCIALMKvObZNtJ6AmdCLP7Lg" data-name="Bloomberg Television"><div class="name">Bloomberg Television<small>経済</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCIALMKvObZNtJ6AmdCLP7Lg/live" target="_blank" rel="noopener">YouTube</a></div></li>
+      <li data-ch="UCEAZeUIeJs0IjQiqTCdVSIg" data-name="Yahoo Finance"><div class="name">Yahoo Finance<small>米国 / 経済</small></div><div class="act"><button class="play" type="button">▶ 再生</button><a class="go" href="https://www.youtube.com/channel/UCEAZeUIeJs0IjQiqTCdVSIg/live" target="_blank" rel="noopener">YouTube</a></div></li>
     </ul>
   </section>
 
@@ -133,14 +167,21 @@ li.active .play{background:var(--chip);color:var(--fg)}
   }
   items.forEach(function(li){li.dataset.state='loading';badge(li,'確認中','');li.querySelector('.play').addEventListener('click',function(){play(li)})});
 
-  fetch('/api/live').then(function(r){return r.json()}).then(function(d){
-    items.forEach(function(li){
-      var v=d[li.dataset.ch];li.dataset.state='done';
-      if(v&&v.id){li.dataset.vid=v.id;li.dataset.embed=v.embeddable?'1':'0';badge(li,v.embeddable?'LIVE':'LIVE（埋め込み不可）',v.embeddable?'live':'')}
-      else badge(li,'配信なし','');
-    });
-  }).catch(function(){items.forEach(function(li){li.dataset.state='done';badge(li,'状況不明','')})});
+  var ids=[].map.call(items,function(li){return li.dataset.ch}),chunks=[];
+  for(var k=0;k<ids.length;k+=20)chunks.push(ids.slice(k,k+20));
+  Promise.all(chunks.map(function(ch){
+    return fetch('/api/live?ch='+ch.join(',')).then(function(r){return r.json()}).then(function(d){
+      ch.forEach(function(c){
+        var li=document.querySelector('li[data-ch="'+c+'"]'),v=d[c];li.dataset.state='done';
+        if(v&&v.id){li.dataset.vid=v.id;li.dataset.embed=v.embeddable?'1':'0';badge(li,v.embeddable?'LIVE':'LIVE（埋め込み不可）',v.embeddable?'live':'')}
+        else badge(li,'配信なし','');
+      });
+    }).catch(function(){ch.forEach(function(c){var li=document.querySelector('li[data-ch="'+c+'"]');li.dataset.state='done';badge(li,'状況不明','')})});
+  })).then(function(){applyOnly()});
 
+  var only=document.getElementById('liveOnly');
+  function applyOnly(){items.forEach(function(li){li.hidden=only.checked&&!li.dataset.vid});document.querySelectorAll('li[data-link]').forEach(function(li){li.hidden=only.checked})}
+  only.addEventListener('change',applyOnly);
   var btns=document.querySelectorAll('.tabs button'),secs=document.querySelectorAll('section[data-g]');
   btns.forEach(function(b){b.addEventListener('click',function(){
     btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});

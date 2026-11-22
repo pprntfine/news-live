@@ -1,7 +1,7 @@
 // Cloudflare Worker: serves the page and resolves each channel's current live video ID.
 // deploy.py replaces __HTML__ with the contents of index.html.
 const HTML = __HTML__;
-const CHANNELS = __CHANNELS__;
+const CHANNELS = new Set(__CHANNELS__);
 const H = { 'user-agent': 'Mozilla/5.0', cookie: 'CONSENT=YES+1; SOCS=CAI', 'accept-language': 'ja' };
 
 async function resolve(ch) {
@@ -21,7 +21,9 @@ export default {
     const u = new URL(req.url);
     if (u.pathname === '/api/live') {
       const out = {};
-      await Promise.all(CHANNELS.map(async (c) => { out[c] = await resolve(c); }));
+      // Free plan allows 50 subrequests per request: at most 20 channels (2 fetches each).
+      const list = (u.searchParams.get('ch') || '').split(',').filter((c) => CHANNELS.has(c)).slice(0, 20);
+      await Promise.all(list.map(async (c) => { out[c] = await resolve(c); }));
       return new Response(JSON.stringify(out), { headers: { 'content-type': 'application/json', 'cache-control': 'public,max-age=60' } });
     }
     return new Response(HTML, { headers: { 'content-type': 'text/html;charset=utf-8', 'cache-control': 'no-cache' } });
