@@ -38,9 +38,13 @@ h1{font-family:var(--font-head);font-size:clamp(1.6rem,5vw,2.2rem);margin:0 0 4p
 .resume{margin-top:10px;font:inherit;font-weight:700;padding:8px 18px;border:0;border-radius:6px;background:var(--live);color:#fff;cursor:pointer}
 .fallback{color:#8cc4ff;font-weight:700}
 .idle{color:#9aabba;text-align:center;padding:16px;font-size:.95rem}
-.player.big .screen{width:min(100%,calc(80vh*16/9))}
-.size{margin-left:auto;font:inherit;font-size:.82rem;padding:3px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--fg);cursor:pointer}
 @media(max-width:700px){.player{margin-inline:calc(-1*max(16px,env(safe-area-inset-left,0px)));padding-inline:0}.player .screen{width:100%;border-radius:0}.player .now{padding-inline:max(16px,env(safe-area-inset-left,0px))}}
+.size{display:none;margin-left:auto;font:inherit;font-size:.85rem;font-weight:700;padding:5px 14px;border:0;border-radius:999px;background:var(--live);color:#fff;cursor:pointer}
+@media(max-width:700px) and (orientation:portrait){.size{display:inline-block}}
+@media(orientation:landscape) and (max-height:520px){.screen{width:min(100%,calc(80vh*16/9))}}
+.close-land{display:none}
+.player.land .screen{position:fixed;top:0;left:0;width:100vh;width:100dvh;height:100vw;height:100dvw;aspect-ratio:auto;max-width:none;margin:0;border-radius:0;transform-origin:top left;transform:translateX(100vw) rotate(90deg);transform:translateX(100dvw) rotate(90deg);z-index:1000;background:#000}
+.player.land .close-land{display:block;position:absolute;top:10px;right:10px;z-index:2;font:inherit;font-size:.85rem;font-weight:700;padding:6px 14px;border:0;border-radius:999px;background:rgba(0,0,0,.65);color:#fff;cursor:pointer}
 .now{display:flex;align-items:center;gap:10px;margin-top:10px;min-height:1.6em;font-weight:700}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--live);flex:none}
 .now[hidden]{display:none}
@@ -87,7 +91,7 @@ li.active .play{background:var(--chip);color:var(--fg)}
 
   <div class="player">
     <div class="screen" id="screen"><div class="idle">下の一覧から放送局を選んでください</div></div>
-    <div class="now" id="now" hidden><span class="dot"></span><span id="nowName"></span><button type="button" class="size" id="sizeBtn">さらに大きく</button></div>
+    <div class="now" id="now" hidden><span class="dot"></span><span id="nowName"></span><button type="button" class="size" id="landBtn">⤢ 画面いっぱいに拡大</button></div>
   </div>
 
   <p class="hint">「再生」を押すと音声つきで始まります。音が出ないときは、プレーヤー右下の音量ボタンを確認してください。配信状況は、ページを開いたときに自動で確認します。配信がない局や、埋め込みを許可していない局は、YouTubeへのリンクを表示します。</p>
@@ -220,6 +224,7 @@ li.active .play{background:var(--chip);color:var(--fg)}
     f.src='https://www.youtube.com/embed/'+li.dataset.vid+'?autoplay=1&playsinline=1';
     f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.title=li.dataset.name+' ライブ';
     screen.replaceChildren(f);
+    if(typeof setLand==='function')setLand(playerEl.classList.contains('land'));
     playing=li;
   }
   // Stop playback while the page is in the background (home screen, other tab) and offer to resume.
@@ -227,6 +232,7 @@ li.active .play{background:var(--chip);color:var(--fg)}
   function stopForBackground(){
     if(!playing||!screen.querySelector('iframe'))return;
     var li=playing;
+    setLand(false);
     var box=document.createElement('div');box.className='idle';
     box.appendChild(document.createTextNode('バックグラウンドのため再生を止めました。'));
     var b=document.createElement('button');b.type='button';b.className='resume';b.textContent='▶ '+li.dataset.name+' の再生を再開';
@@ -268,8 +274,15 @@ li.active .play{background:var(--chip);color:var(--fg)}
   document.querySelectorAll('.alt').forEach(function(b){b.addEventListener('click',function(){
     var li=document.querySelector('li[data-ch="'+b.dataset.play+'"]');if(li)play(li);
   })});
-  var sizeBtn=document.getElementById('sizeBtn'),playerEl=document.querySelector('.player');
-  sizeBtn.addEventListener('click',function(){var big=playerEl.classList.toggle('big');sizeBtn.textContent=big?'もとの大きさ':'さらに大きく'});
+  var landBtn=document.getElementById('landBtn'),playerEl=document.querySelector('.player');
+  var closeBtn=document.createElement('button');closeBtn.type='button';closeBtn.className='close-land';closeBtn.textContent='✕ もとに戻す';
+  function setLand(on){
+    playerEl.classList.toggle('land',on);
+    if(on){screen.appendChild(closeBtn)}else if(closeBtn.parentNode){closeBtn.parentNode.removeChild(closeBtn)}
+  }
+  landBtn.addEventListener('click',function(){if(!screen.querySelector('iframe')){return}setLand(true)});
+  closeBtn.addEventListener('click',function(){setLand(false)});
+  window.addEventListener('orientationchange',function(){setLand(false)});
   var only=document.getElementById('liveOnly');
   function applyOnly(){items.forEach(function(li){li.hidden=only.checked&&!li.dataset.vid});document.querySelectorAll('li[data-link]').forEach(function(li){li.hidden=only.checked});document.querySelector('section[data-g="other"]').classList.toggle('empty',only.checked)}
   only.addEventListener('change',applyOnly);
