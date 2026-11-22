@@ -27,6 +27,7 @@ h1{font-family:var(--font-head);font-size:clamp(1.6rem,5vw,2.2rem);margin:0 0 4p
 .player{margin-bottom:24px}
 .screen{position:relative;aspect-ratio:16/9;max-width:100%;background:var(--screen);border-radius:8px;overflow:hidden;display:grid;place-items:center}
 .screen iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.tag.live{background:transparent;color:var(--live);border:1px solid var(--live)}
 .fallback{color:#8cc4ff;font-weight:700}
 .idle{color:#9aabba;text-align:center;padding:16px;font-size:.95rem}
 .now{display:flex;align-items:center;gap:10px;margin-top:10px;min-height:1.6em;font-weight:700}
@@ -65,7 +66,7 @@ li.active .play{background:var(--chip);color:var(--fg)}
   <div class="player">
     <div class="screen" id="screen"><div class="idle">下の一覧から放送局を選んでください</div></div>
     <div class="now" id="now" hidden><span class="dot"></span><span id="nowName"></span></div>
-    <p class="hint">音声はミュートで始まります。プレーヤー右下の音量ボタンで解除してください。配信がない局や、埋め込みを許可していない局は、YouTubeへのリンクを表示します。</p>
+    <p class="hint">音声はミュートで始まります。プレーヤー右下の音量ボタンで解除してください。各局の配信状況は、ページを開いたときに自動で確認します。配信がない局や、埋め込みを許可していない局は、YouTubeへのリンクを表示します。</p>
   </div>
 
   <div class="tabs" role="group" aria-label="地域で絞り込み">
@@ -107,34 +108,38 @@ li.active .play{background:var(--chip);color:var(--fg)}
 (function(){
   var screen=document.getElementById('screen'),now=document.getElementById('now'),nowName=document.getElementById('nowName');
   var items=document.querySelectorAll('li[data-ch]');
-  var current=null;
-  window.addEventListener('message',function(e){
-    if(!current||!/youtube\.com$/.test(new URL(e.origin).hostname))return;
-    var d;try{d=JSON.parse(e.data)}catch(x){return}
-    if(d&&d.event==='onError'){
-      var a=document.createElement('a');
-      a.href='https://www.youtube.com/channel/'+current.dataset.ch+'/live';a.target='_blank';a.rel='noopener';a.className='fallback';
-      a.textContent='この局はここで再生できません。YouTubeで開く →';
-      var box=document.createElement('div');box.className='idle';box.appendChild(a);
-      screen.replaceChildren(box);
-      nowName.textContent=current.dataset.name+'（現在配信なし、または埋め込み不可）';
-    }
-  });
+  function link(li){return 'https://www.youtube.com/channel/'+li.dataset.ch+'/live'}
+  function message(li,text){
+    var box=document.createElement('div');box.className='idle';
+    box.appendChild(document.createTextNode(text+' '));
+    var a=document.createElement('a');a.href=link(li);a.target='_blank';a.rel='noopener';a.className='fallback';a.textContent='YouTubeで開く →';
+    box.appendChild(a);screen.replaceChildren(box);
+  }
   function play(li){
     items.forEach(function(x){x.classList.toggle('active',x===li)});
+    nowName.textContent=li.dataset.name;now.hidden=false;
+    if(!li.dataset.vid){message(li,li.dataset.state==='loading'?'配信状況を確認中です。少し待ってからもう一度押してください。':'現在ライブ配信が見つかりません。');return}
+    if(li.dataset.embed==='0'){message(li,'この配信は埋め込み再生が許可されていません。');return}
     var f=document.createElement('iframe');
-    f.src='https://www.youtube.com/embed/live_stream?channel='+li.dataset.ch+'&autoplay=1&mute=1&playsinline=1&enablejsapi=1&origin='+encodeURIComponent(location.origin);
-    f.addEventListener('load',function(){try{f.contentWindow.postMessage(JSON.stringify({event:'listening',id:1}),'*')}catch(e){}});
-    current=li;
-    f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
-    f.allowFullscreen=true;
-    f.title=li.dataset.name+' ライブ';
+    f.src='https://www.youtube.com/embed/'+li.dataset.vid+'?autoplay=1&mute=1&playsinline=1';
+    f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.title=li.dataset.name+' ライブ';
     screen.replaceChildren(f);
-    nowName.textContent=li.dataset.name+' を再生中';
-    now.hidden=false;
     screen.scrollIntoView({behavior:'smooth',block:'nearest'});
   }
-  items.forEach(function(li){li.querySelector('.play').addEventListener('click',function(){play(li)})});
+  function badge(li,text,cls){
+    var t=li.querySelector('.status');
+    if(!t){t=document.createElement('span');t.className='tag status';li.querySelector('.name').insertBefore(t,li.querySelector('.name').firstChild)}
+    t.textContent=text;t.className='tag status '+cls;
+  }
+  items.forEach(function(li){li.dataset.state='loading';badge(li,'確認中','');li.querySelector('.play').addEventListener('click',function(){play(li)})});
+
+  fetch('/api/live').then(function(r){return r.json()}).then(function(d){
+    items.forEach(function(li){
+      var v=d[li.dataset.ch];li.dataset.state='done';
+      if(v&&v.id){li.dataset.vid=v.id;li.dataset.embed=v.embeddable?'1':'0';badge(li,v.embeddable?'LIVE':'LIVE（埋め込み不可）',v.embeddable?'live':'')}
+      else badge(li,'配信なし','');
+    });
+  }).catch(function(){items.forEach(function(li){li.dataset.state='done';badge(li,'状況不明','')})});
 
   var btns=document.querySelectorAll('.tabs button'),secs=document.querySelectorAll('section[data-g]');
   btns.forEach(function(b){b.addEventListener('click',function(){
