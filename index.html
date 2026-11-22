@@ -40,6 +40,9 @@ h1{font-family:var(--font-head);font-size:clamp(1.6rem,5vw,2.2rem);margin:0 0 4p
 .tabs button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
 button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 section{margin-bottom:28px}
+.pipguide{border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:10px 14px;margin:0 0 12px;font-size:.85rem}
+.pipguide p{margin:0}
+.is-touch .pc-only,.is-pc .sp-only{display:none}
 .pop{font-size:.9rem;font-weight:700;padding:6px 14px;border-radius:6px;background:var(--live);color:#fff;text-decoration:none;white-space:nowrap}
 .alts{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.82rem;color:var(--muted)}
 .alt{font:inherit;font-size:.82rem;padding:3px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--fg);cursor:pointer}
@@ -140,12 +143,16 @@ li.active .play{background:var(--chip);color:var(--fg)}
 
   <section data-g="other">
     <h2>YouTube以外のサービス・公式サイト</h2>
-    <p class="hint">ABEMAやTVerは、ほかのサイトの中での再生を禁止しています。「小窓で再生」を押すと、このページの横に小さな再生ウィンドウを開きます。同じ局がYouTubeでも配信している場合は、このページの中でも再生できます。</p>
+    <p class="hint">ABEMAやTVerは、ほかのサイトの中での再生を禁止しています。同じ局がYouTubeでも配信している場合は、各行のボタンでこのページの中で再生できます。</p>
+    <div class="pipguide" id="pipguide">
+      <p class="pc-only"><b>パソコン:</b> 「小窓で再生」で、このページの横に別ウィンドウを開きます。ブラウザが新しいタブで開いた場合は、ABEMAやTVerの映像を右クリックして「ピクチャー イン ピクチャー」を選ぶと、映像だけを小窓で表示できます。</p>
+      <p class="sp-only"><b>スマホ:</b> スマホのブラウザは、ほかのサイトを小窓で開けません。ABEMAやTVerのアプリかサイトで再生を始めてから、ホーム画面に戻ってください。アプリやサイトが対応していれば、映像が小窓（ピクチャ・イン・ピクチャ）で続きます。</p>
+    </div>
     <h3>動画配信サービス・アプリ</h3>
     <ul>
-      <li data-link="1" class="svc"><div class="name">ABEMAニュース<small>24時間のニュース専門チャンネル。ABEMAの画面を小窓で開きます</small></div><div class="act"><a class="pop" href="https://abema.tv/now-on-air/abema-news" target="_blank" rel="noopener">▶ 小窓で再生</a></div>
+      <li data-link="1" class="svc"><div class="name">ABEMAニュース<small>24時間のニュース専門チャンネル</small></div><div class="act"><a class="pop" href="https://abema.tv/now-on-air/abema-news" target="_blank" rel="noopener">▶ 小窓で再生</a></div>
         <div class="alts">このページで再生: <button type="button" class="alt" data-play="UCghgvap_zF8JeHqXsiKAPDA">ABEMA NEWS（YouTube版）</button></div></li>
-      <li data-link="1" class="svc"><div class="name">TVer 24時間ニュースライブ<small>日テレ・TBS・フジのニュース。TVerの画面を小窓で開きます</small></div><div class="act"><a class="pop" href="https://tver.jp/live/" target="_blank" rel="noopener">▶ 小窓で再生</a></div>
+      <li data-link="1" class="svc"><div class="name">TVer 24時間ニュースライブ<small>日テレ・TBS・フジのニュース</small></div><div class="act"><a class="pop" href="https://tver.jp/live/" target="_blank" rel="noopener">▶ 小窓で再生</a></div>
         <div class="alts">同じ局をこのページで再生: <button type="button" class="alt" data-play="UCuTAXTexrhetbOe3zgskJBQ">日テレNEWS</button><button type="button" class="alt" data-play="UC6AG81pAkf6Lbi_1VC5NmPA">TBS NEWS DIG</button><button type="button" class="alt" data-play="UCoQBJMzcwmXrRSHBFAlTsIw">FNN</button></div></li>
       <li data-link="1"><div class="name">NHKプラス<small>NHKの放送のネット同時配信（受信契約者向け）</small></div><div class="act"><a class="go" href="https://plus.nhk.jp/" target="_blank" rel="noopener">開く →</a></div></li>
       <li data-link="1"><div class="name">ニコニコ生放送<small>ニュース・時事の生放送</small></div><div class="act"><a class="go" href="https://live.nicovideo.jp/" target="_blank" rel="noopener">開く →</a></div></li>
@@ -222,11 +229,16 @@ li.active .play{background:var(--chip);color:var(--fg)}
     }).catch(function(){ch.forEach(function(c){var li=document.querySelector('li[data-ch="'+c+'"]');li.dataset.state='done';badge(li,'状況不明','')})});
   })).then(function(){applyOnly()});
 
-  document.querySelectorAll('.pop').forEach(function(a){a.addEventListener('click',function(e){
-    var w=Math.min(1000,window.screen.availWidth-40),h=Math.round(w*0.62);
-    var win=null;try{win=window.open(a.href,'newslive-sub','popup=yes,width='+w+',height='+h+',left='+(window.screen.availWidth-w-20)+',top=40')}catch(x){}
-    if(win){e.preventDefault();try{win.focus()}catch(x){}}
-  })});
+  var touch=window.matchMedia('(pointer: coarse)').matches;
+  document.documentElement.classList.add(touch?'is-touch':'is-pc');
+  document.querySelectorAll('.pop').forEach(function(a){
+    if(touch){a.textContent=a.href.indexOf('abema')>=0?'ABEMAで開く →':'TVerで開く →';return}
+    a.addEventListener('click',function(e){
+      var sw=window.screen.availWidth,w=Math.min(960,Math.round(sw*0.5)),h=Math.round(w*0.62);
+      var win=null;try{win=window.open(a.href,'newslive-sub','popup=yes,width='+w+',height='+h+',left='+(sw-w-20)+',top=60')}catch(x){}
+      if(win){e.preventDefault();try{win.focus()}catch(x){}}
+    });
+  });
   document.querySelectorAll('.alt').forEach(function(b){b.addEventListener('click',function(){
     var li=document.querySelector('li[data-ch="'+b.dataset.play+'"]');if(li)play(li);
   })});
