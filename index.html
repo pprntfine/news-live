@@ -24,8 +24,8 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-body);
 .wrap{max-width:900px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 h1{font-family:var(--font-head);font-size:clamp(1.6rem,5vw,2.2rem);margin:0 0 4px;text-wrap:balance}
 .lead{color:var(--muted);margin:0 0 20px;font-size:.95rem}
-.player{margin-bottom:24px}
-.screen{position:relative;aspect-ratio:16/9;max-width:100%;background:var(--screen);border-radius:8px;overflow:hidden;display:grid;place-items:center}
+.player{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);padding-block:8px;margin-bottom:16px;box-shadow:0 6px 10px -8px rgba(0,0,0,.45)}
+.screen{position:relative;aspect-ratio:16/9;width:min(100%,calc(45vh*16/9));margin-inline:auto;background:var(--screen);border-radius:8px;overflow:hidden;display:grid;place-items:center}
 .screen iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .tag.live{background:transparent;color:var(--live);border:1px solid var(--live)}
 .fallback{color:#8cc4ff;font-weight:700}
@@ -77,9 +77,9 @@ li.active .play{background:var(--chip);color:var(--fg)}
   <div class="player">
     <div class="screen" id="screen"><div class="idle">下の一覧から放送局を選んでください</div></div>
     <div class="now" id="now" hidden><span class="dot"></span><span id="nowName"></span></div>
-    <p class="hint">音声はミュートで始まります。プレーヤー右下の音量ボタンで解除してください。各局の配信状況は、ページを開いたときに自動で確認します。配信がない局や、埋め込みを許可していない局は、YouTubeへのリンクを表示します。</p>
   </div>
 
+  <p class="hint">「再生」を押すと音声つきで始まります。音が出ないときは、プレーヤー右下の音量ボタンを確認してください。配信状況は、ページを開いたときに自動で確認します。配信がない局や、埋め込みを許可していない局は、YouTubeへのリンクを表示します。</p>
   <div class="tabs" role="group" aria-label="地域で絞り込み">
     <label class="only"><input type="checkbox" id="liveOnly"> ライブ中のみ</label>
     <button type="button" data-f="all" aria-pressed="true">すべて</button>
@@ -205,10 +205,9 @@ li.active .play{background:var(--chip);color:var(--fg)}
     if(!li.dataset.vid){message(li,li.dataset.state==='loading'?'配信状況を確認中です。少し待ってからもう一度押してください。':'現在ライブ配信が見つかりません。');return}
     if(li.dataset.embed==='0'){message(li,'この配信は埋め込み再生が許可されていません。');return}
     var f=document.createElement('iframe');
-    f.src='https://www.youtube.com/embed/'+li.dataset.vid+'?autoplay=1&mute=1&playsinline=1';
+    f.src='https://www.youtube.com/embed/'+li.dataset.vid+'?autoplay=1&playsinline=1';
     f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.title=li.dataset.name+' ライブ';
     screen.replaceChildren(f);
-    screen.scrollIntoView({behavior:'smooth',block:'nearest'});
   }
   function badge(li,text,cls){
     var t=li.querySelector('.status');
