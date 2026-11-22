@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ニュースライブ一覧</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0a1f36">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ニュースライブ">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap">
 <style>
 /* Layout: 上にプレーヤー、下に放送局リスト。行の「再生」でサイト内の画面が切り替わる */
@@ -250,6 +257,7 @@ li.active .play{background:var(--chip);color:var(--fg)}
     secs.forEach(function(s){s.hidden=b.dataset.f!=='all'&&s.dataset.g!==b.dataset.f});
   })});
 })();
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js').catch(function(){});
 </script>
 </body>
 </html>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16406e"/><stop offset="1" stop-color="#0a1f36"/></linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <!-- broadcast waves -->
+  <g fill="none" stroke="#5aa9f0" stroke-width="14" stroke-linecap="round" opacity=".9">
+    <path d="M196 132 a76 76 0 0 1 120 0"/>
+    <path d="M166 100 a118 118 0 0 1 180 0" opacity=".6"/>
+  </g>
+  <circle cx="256" cy="158" r="12" fill="#5aa9f0"/>
+  <!-- monitor -->
+  <rect x="86" y="176" width="340" height="226" rx="32" fill="#f3f5f7"/>
+  <rect x="104" y="194" width="304" height="170" rx="18" fill="#14202b"/>
+  <!-- LIVE pill -->
+  <rect x="124" y="212" width="116" height="44" rx="22" fill="#e5304a"/>
+  <circle cx="150" cy="234" r="8" fill="#fff"/>
+  <text x="166" y="244" font-family="Arial,Helvetica,sans-serif" font-weight="800" font-size="26" fill="#fff" letter-spacing="1">LIVE</text>
+  <!-- headline lines -->
+  <rect x="124" y="280" width="250" height="16" rx="8" fill="#e6edf3"/>
+  <rect x="124" y="308" width="180" height="16" rx="8" fill="#5a6b7a"/>
+  <!-- ticker -->
+  <rect x="104" y="334" width="304" height="30" rx="0" fill="#e5304a"/>
+  <rect x="124" y="344" width="120" height="10" rx="5" fill="#fff" opacity=".9"/>
+  <rect x="258" y="344" width="60" height="10" rx="5" fill="#fff" opacity=".6"/>
+  <!-- stand -->
+  <rect x="226" y="402" width="60" height="26" fill="#f3f5f7"/>
+  <rect x="176" y="424" width="160" height="20" rx="10" fill="#f3f5f7"/>
+</svg>

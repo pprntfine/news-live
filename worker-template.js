@@ -1,6 +1,7 @@
 // Cloudflare Worker: serves the page and resolves each channel's current live video ID.
 // deploy.py replaces __HTML__ with the contents of index.html.
 const HTML = __HTML__;
+const ASSETS = __ASSETS__;
 const CHANNELS = new Set(__CHANNELS__);
 const H = { 'user-agent': 'Mozilla/5.0', cookie: 'CONSENT=YES+1; SOCS=CAI', 'accept-language': 'ja' };
 
@@ -25,6 +26,11 @@ export default {
       const list = (u.searchParams.get('ch') || '').split(',').filter((c) => CHANNELS.has(c)).slice(0, 20);
       await Promise.all(list.map(async (c) => { out[c] = await resolve(c); }));
       return new Response(JSON.stringify(out), { headers: { 'content-type': 'application/json', 'cache-control': 'public,max-age=60' } });
+    }
+    const a = ASSETS[u.pathname];
+    if (a) {
+      const body = a.b64 ? Uint8Array.from(atob(a.data), (c) => c.charCodeAt(0)) : a.data;
+      return new Response(body, { headers: { 'content-type': a.type, 'cache-control': a.cache || 'public,max-age=86400' } });
     }
     return new Response(HTML, { headers: { 'content-type': 'text/html;charset=utf-8', 'cache-control': 'no-cache' } });
   },
